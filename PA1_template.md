@@ -1,16 +1,12 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 ## Loading and preprocessing the data
 
 - unzip the zip file
 - read in the data from the csv file
 
-```{r}
+
+```r
 unzip("./activity.zip")
 activity <- read.csv("./activity.csv")
 ```
@@ -23,7 +19,8 @@ activity <- read.csv("./activity.csv")
 - plot histogram of total number of steps per day
 - calculate mean and median of total number of steps per day
 
-```{r}
+
+```r
 perDay <- activity[!(is.na(activity$steps)),]
 perDay$steps <- as.numeric(perDay$steps)
 
@@ -32,9 +29,24 @@ names(sumPerDay)[2] <- "sumSteps"
 
 hist(sumPerDay$sumSteps, breaks = 10, xlab="total steps per day",
      main="Histogram of total steps per day")
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
+
+```r
 mean(sumPerDay$sumSteps)
+```
+
+```
+## [1] 10766.19
+```
+
+```r
 median(sumPerDay$sumSteps)
+```
+
+```
+## [1] 10765
 ```
 
 ## What is the average daily activity pattern?
@@ -45,7 +57,8 @@ median(sumPerDay$sumSteps)
 - plot mean steps by interval
 - identify interval with maximum mean steps
 
-```{r}
+
+```r
 perInterval <- activity[!(is.na(activity$steps)),]
 perInterval$steps <- as.numeric(perInterval$steps)
 
@@ -55,9 +68,17 @@ names(meanPerInterval)[2] <- "meanSteps"
 plot(meanPerInterval$interval, meanPerInterval$meanSteps, type="l",
      xlab="intervals", ylab="mean number of steps", 
      main="Daily activity pattern")
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
+
+```r
 maxIndex <- which.max(meanPerInterval$meanSteps)
 meanPerInterval$interval[maxIndex]
+```
+
+```
+## [1] 835
 ```
 
 
@@ -71,9 +92,16 @@ meanPerInterval$interval[maxIndex]
 - calculate mean and median of total number of steps per day
 
 
-```{r}
-sum(is.na(activity$steps))
 
+```r
+sum(is.na(activity$steps))
+```
+
+```
+## [1] 2304
+```
+
+```r
 NAs <- activity[is.na(activity$steps),]
 NAs <- NAs[,-1]
 NAs <- merge.data.frame(NAs, meanPerInterval, by="interval", all.x = TRUE)
@@ -89,9 +117,24 @@ names(sumPerDay2)[2] <- "sumSteps"
 
 hist(sumPerDay2$sumSteps, breaks = 10, xlab="total steps per day",
      main="Histogram of total steps per day")
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
+
+```r
 mean(sumPerDay2$sumSteps)
+```
+
+```
+## [1] 10766.19
+```
+
+```r
 median(sumPerDay2$sumSteps)
+```
+
+```
+## [1] 10766.19
 ```
 
 For the selected filling strategy (fill with interval mean), there is no impact on the mean and median total number of steps.
@@ -109,8 +152,16 @@ However, the now histogram shows a much higher frequency in the central bucket (
 - plot mean steps by interval by type in the plot panel
 
 
-```{r}
+
+```r
 Sys.setlocale("LC_TIME", "English")
+```
+
+```
+## [1] "English_United States.1252"
+```
+
+```r
 activity2$date <- as.Date(activity2$date, format = "%Y-%m-%d")
 activity2$dayType <- weekdays(activity2$date, abbreviate = TRUE)
 Weekend <- c('Sat', 'Sun')
@@ -133,8 +184,9 @@ plot(meanPerInterval2WD$interval, meanPerInterval2WD$meanSteps, type="l",
 plot(meanPerInterval2WE$interval, meanPerInterval2WE$meanSteps, type="l",
      xlab="intervals", ylab="mean number of steps",
      main="Daily activity pattern for weekends")
-
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
 
 
 
